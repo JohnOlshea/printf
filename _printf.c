@@ -9,7 +9,7 @@ int print_unsigned(unsigned int num);
 int print_octal(unsigned int num);
 int handle_unsigned(unsigned int num, int divisor);
 int handle_octal(unsigned int num);
-int handle_hexadecimal(unsigned int num);
+int handle_hexadecimal(unsigned int num, int uppercase);
 
 /**
  * _printf - Custom printf function.
@@ -71,7 +71,8 @@ int handle_format(const char *format, int *i, va_list aps)
 		char_printed++;
 		break;
 	case 'u':
-		char_printed += print_unsigned(va_arg(aps, unsigned int));
+		u_num = va_arg(aps, unsigned int);
+		char_printed += handle_unsigned(u_num, divisor);
 		break;
 	case 'o':
 		char_printed += print_octal(va_arg(aps, unsigned int));
@@ -82,7 +83,11 @@ int handle_format(const char *format, int *i, va_list aps)
 		break;
 	case 'x':
 		u_num = va_arg(aps, unsigned int);
-		char_printed += handle_hexadecimal(u_num);
+		char_printed += handle_hexadecimal(u_num, 0);
+		break;
+	case 'X':
+		u_num = va_arg(aps, unsigned int);
+		char_printed += handle_hexadecimal(u_num, 1);
 		break;
 	case '%':
 		_putchar('%');
@@ -101,6 +106,7 @@ int handle_format(const char *format, int *i, va_list aps)
 int print_string(char *str)
 {
 	int str_count = word_count(str);
+
 	print_word(str);
 	return (str_count);
 }
@@ -113,6 +119,7 @@ int print_string(char *str)
 int print_int(int num)
 {
 	int divisor = 1;
+
 	return (handle_int(num, divisor));
 }
 
@@ -124,6 +131,7 @@ int print_int(int num)
 int print_unsigned(unsigned int num)
 {
 	int divisor = 1;
+
 	return (handle_unsigned(num, divisor));
 }
 
@@ -135,6 +143,7 @@ int print_unsigned(unsigned int num)
 int print_octal(unsigned int num)
 {
 	int octal_count = handle_octal(num);
+
 	return (octal_count);
 }
 
@@ -221,27 +230,30 @@ int handle_binary(unsigned int num)
 /**
  * handle_hexadecimal - Handle printing of an unsigned integer in hexadecimal.
  * @num: Unsigned integer to print in hexadecimal.
+ * @uppercase: Flag to determine if the output should be uppercase.
  * Return: Number of characters printed.
  */
-int handle_hexadecimal(unsigned int num)
+int handle_hexadecimal(unsigned int num, int uppercase)
 {
-    int hex_count = 0;
-    char hex[100];
-    int i = 0;
+	int hex_count = 0;
+	char hex[100];
+	int i = 0;
 
-    while (num != 0)
-    {
-        int remainder = num % 16;
-        hex[i] = (remainder < 10) ? remainder + '0' : remainder - 10 + 'a';
-        num /= 16;
-        i++;
-    }
+	while (num != 0)
+	{
+		int remainder = num % 16;
 
-    for (i = i - 1; i >= 0; i--)
-    {
-        _putchar(hex[i]);
-        hex_count++;
-    }
+		hex[i] = (remainder < 10) ?
+			remainder + '0' : remainder - 10 + ((uppercase) ? 'A' : 'a');
+		num /= 16;
+		i++;
+	}
 
-    return hex_count;
+	for (i = i - 1; i >= 0; i--)
+	{
+		_putchar(hex[i]);
+		hex_count++;
+	}
+
+	return (hex_count);
 }
