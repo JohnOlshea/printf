@@ -8,6 +8,6 @@
  */
 int main(void)
 {
-	_printf("Let's try %c", 'w');
+	_printf("Let's try %c %s", 'w', "this");
 	return (0);
 }
