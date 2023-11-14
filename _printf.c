@@ -5,7 +5,6 @@ int print_int(int num);
 int print_string(char *str);
 int handle_format(const char *format, int *i, va_list aps);
 int handle_binary(unsigned int num);
-int print_unsigned(unsigned int num);
 int print_octal(unsigned int num);
 int handle_unsigned(unsigned int num, int divisor);
 int handle_octal(unsigned int num);
@@ -52,47 +51,46 @@ int _printf(const char *format, ...)
  */
 int handle_format(const char *format, int *i, va_list aps)
 {
-	int char_printed = 0, divisor = 1;
+	int char_printed = 0;
 	char *aps_string;
 	unsigned int u_num = 0;
 
 	switch (format[*i])
 	{
-	case 's':
-		aps_string = va_arg(aps, char *);
-		char_printed += print_string(aps_string);
-		break;
-	case 'd':
-	case 'i':
-		char_printed += print_int(va_arg(aps, int));
-		break;
-	case 'c':
-		_putchar(va_arg(aps, int));
-		char_printed++;
-		break;
-	case 'u':
-		u_num = va_arg(aps, unsigned int);
-		char_printed += handle_unsigned(u_num, divisor);
-		break;
-	case 'o':
-		char_printed += print_octal(va_arg(aps, unsigned int));
-		break;
-	case 'b':
-		u_num = va_arg(aps, unsigned int);
-		char_printed += handle_binary(u_num);
-		break;
-	case 'x':
-		u_num = va_arg(aps, unsigned int);
-		char_printed += handle_hexadecimal(u_num, 0);
-		break;
-	case 'X':
-		u_num = va_arg(aps, unsigned int);
-		char_printed += handle_hexadecimal(u_num, 1);
-		break;
-	case '%':
-		_putchar('%');
-		char_printed++;
-		break;
+		case 's':
+			aps_string = va_arg(aps, char *);
+			char_printed += print_string(aps_string);
+			break;
+		case 'd':
+		case 'i':
+			char_printed += print_int(va_arg(aps, int));
+			break;
+		case 'c':
+			_putchar(va_arg(aps, int));
+			char_printed++;
+			break;
+		case 'u':
+			u_num = va_arg(aps, unsigned int);
+			break;
+		case 'o':
+			char_printed += print_octal(va_arg(aps, unsigned int));
+			break;
+		case 'b':
+			u_num = va_arg(aps, unsigned int);
+			char_printed += handle_binary(u_num);
+			break;
+		case 'x':
+			u_num = va_arg(aps, unsigned int);
+			char_printed += handle_hexadecimal(u_num, 0);
+			break;
+		case 'X':
+			u_num = va_arg(aps, unsigned int);
+			char_printed += handle_hexadecimal(u_num, 1);
+			break;
+		case '%':
+			_putchar('%');
+			char_printed++;
+			break;
 	}
 
 	return (char_printed);
@@ -123,17 +121,6 @@ int print_int(int num)
 	return (handle_int(num, divisor));
 }
 
-/**
- * print_unsigned - Print an unsigned integer.
- * @num: Unsigned integer to print.
- * Return: Number of characters printed.
- */
-int print_unsigned(unsigned int num)
-{
-	int divisor = 1;
-
-	return (handle_unsigned(num, divisor));
-}
 
 /**
  * print_octal - Print an octal number.
