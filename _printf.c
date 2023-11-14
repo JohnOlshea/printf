@@ -51,7 +51,7 @@ int _printf(const char *format, ...)
  */
 int handle_format(const char *format, int *i, va_list aps)
 {
-	int char_printed = 0;
+	int char_printed = 0, divisor = 1;
 	char *aps_string;
 	unsigned int u_num = 0;
 
@@ -71,6 +71,7 @@ int handle_format(const char *format, int *i, va_list aps)
 			break;
 		case 'u':
 			u_num = va_arg(aps, unsigned int);
+			char_printed += handle_unsigned(u_num, divisor);
 			break;
 		case 'o':
 			char_printed += print_octal(va_arg(aps, unsigned int));
