@@ -11,6 +11,7 @@
 int handle_int(int num, int divisor)
 {
 	int num_count = 0;
+
 	if (num < 0)
 	{
 		_putchar('-');
