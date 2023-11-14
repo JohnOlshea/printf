@@ -52,7 +52,7 @@ int _printf(const char *format, ...)
  */
 int handle_format(const char *format, int *i, va_list aps)
 {
-	int char_printed = 0;
+	int char_printed = 0, divisor = 1;
 	char *aps_string;
 	unsigned int u_num = 0;
 
