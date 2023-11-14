@@ -1,71 +1,96 @@
-#include <stdio.h>
 #include <stdarg.h>
 #include "main.h"
 
-/*int word_count(char *string);*/
+int print_int(int num);
+int print_string(char *str);
+int handle_format(const char *format, int *i, va_list aps);
 
 /**
- * _printf - function that produces output according to a format.
- *
- * @format: format
- * @...: variadic parameters
- *
- * Return: the number of characters printed
+ * _printf - Custom printf function.
+ * @format: Format string.
+ * @...: Variable arguments.
+ * Return: Number of characters printed.
  */
 int _printf(const char *format, ...)
 {
 	va_list aps;
-	int i = 0;
-	int char_printed = 0;
-	int str_count = 0;
-	int num = 0;
-	int divisor = 1;
-	char *aps_string;
+	int i = 0, char_printed = 0;
 
 	va_start(aps, format);
 
-	while (format[i] != '\0')
+	for (; format[i] != '\0'; i++)
 	{
 		if (format[i] == '%')
 		{
 			i++;
-			if (format[i] == 's')
-			{
-				aps_string = va_arg(aps, char *);
-				str_count = word_count(aps_string);
-
-				char_printed += str_count;
-				print_word(aps_string);
-			}
-			else if (format[i] == 'd' || format[i] == 'i')
-			{
-				num = va_arg(aps, int);
-
-				char_printed += handle_int(num, divisor);
-			}
-			else if (format[i] == 'c')
-			{
-				_putchar(va_arg(aps, int));
-				char_printed++;
-			}
-			else if (format[i] == '%')
-			{
-				_putchar('%');
-				char_printed++;
-			}
+			char_printed += handle_format(format, &i, aps);
 		}
 		else
 		{
 			_putchar(format[i]);
 			char_printed++;
 		}
-		i++;
 	}
-	/**printf("\ntotals print : %d \n", char_printed);*/
 
 	va_end(aps);
-	
-	fflush(stdout);
-	
+
 	return (char_printed);
+}
+
+/**
+ * handle_format - Handle the format specifier.
+ * @format: Format string.
+ * @i: Current position in the format string.
+ * @aps: Argument list.
+ * Return: Number of characters printed.
+ */
+int handle_format(const char *format, int *i, va_list aps)
+{
+	int char_printed = 0;
+	char *aps_string;
+
+	if (format[*i] == 's')
+	{
+		aps_string = va_arg(aps, char *);
+		char_printed += print_string(aps_string);
+	}
+	else if (format[*i] == 'd' || format[*i] == 'i')
+	{
+		char_printed += print_int(va_arg(aps, int));
+	}
+	else if (format[*i] == 'c')
+	{
+		_putchar(va_arg(aps, int));
+		char_printed++;
+	}
+	else if (format[*i] == '%')
+	{
+		_putchar('%');
+		char_printed++;
+	}
+
+	return (char_printed);
+}
+
+/**
+ * print_string - Print a string.
+ * @str: String to print.
+ * Return: Number of characters printed.
+ */
+int print_string(char *str)
+{
+	int str_count = word_count(str);
+	print_word(str);
+	return (str_count);
+}
+
+/**
+ * print_int - Print an integer.
+ * @num: Integer to print.
+ * Return: Number of characters printed.
+ */
+int print_int(int num)
+{
+	int divisor = 1;
+	return (handle_int(num, divisor));
 }
